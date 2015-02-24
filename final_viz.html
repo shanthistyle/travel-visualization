@@ -1,0 +1,319 @@
+<!doctype>
+<link type="text/css" rel="stylesheet" href="rickshaw.min.css">
+<script src="d3.min.js"></script>
+<script src="d3.layout.min.js"></script>
+<script src="rickshaw.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script>
+
+var berkeley = new google.maps.LatLng(37.871742, -122.261310);
+
+var neighborhoods = [
+  new google.maps.LatLng(37.867703, -122.251966),
+  new google.maps.LatLng(37.875326, -122.259197)
+];
+
+var markers = [];
+var paths = [];
+var iterator = 0;
+
+var map;
+
+function initialize() {
+  var mapOptions = {
+    zoom: 15,
+    center: berkeley
+  };
+
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+          mapOptions);
+
+  var route1 = [
+    new google.maps.LatLng(37.867703, -122.251966),
+    new google.maps.LatLng(37.875326, -122.259197)
+  ];
+
+  var route2 = [
+    new google.maps.LatLng(37.867703, -122.251966),
+    new google.maps.LatLng(37.869922, -122.267823)
+  ];
+
+  var route3 = [
+    new google.maps.LatLng(39.2904870577, -76.61433706450001),
+    new google.maps.LatLng(39.2852689071, -76.6135713557)
+  ];
+
+  var path1 = new google.maps.Polyline({
+    path: route1,
+    geodesic: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+
+  var path2 = new google.maps.Polyline({
+    path: route2,
+    geodesic: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+
+  var path3 = new google.maps.Polyline({
+    path: route3,
+    geodesic: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+
+  path1.setMap(map);
+  path2.setMap(map);
+  path3.setMap(map);
+
+  //paths.push(route1);
+  //paths.push(route2);
+  //drawRoutes(paths);
+}
+
+function drop() {
+  for (var i = 0; i < neighborhoods.length; i++) {
+    setTimeout(function() {
+      addMarker();
+    }, i * 200);
+  }
+  drawLine();
+  displayImprovement();
+}
+
+function displayImprovement() {
+  document.getElementById('improve').style.display = 'block';
+}
+
+function drawLine() {
+  var path = new google.maps.Polyline({
+    path: neighborhoods,
+    geodesic: true,
+    strokeColor: '#27ae60',
+    strokeOpacity: 1.0,
+    strokeWeight: 5
+  });
+
+  path.setMap(map)
+}
+
+function addMarker() {
+  var image = 'icon_10692.svg';
+  image.height = 100;
+  image.width = 100;
+  markers.push(new google.maps.Marker({
+    position: neighborhoods[iterator],
+    map: map,
+    draggable: false,
+    animation: google.maps.Animation.DROP,
+    icon: image
+  }));
+  iterator++;
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+
+<style>
+html, body, #map-canvas {
+        height: 75%;
+        width: 100%;
+        margin: 25px;
+        padding: 25px;
+        font-family: Helvetica;
+}
+#improve{
+       font-family: Helvetica; 
+       color: #27ae60;
+}
+h2 {
+    text-align: center;
+    left: 100px;
+    top: 150px;
+}
+#panel {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: -180px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+}
+
+.btn {
+  background: #3498db;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
+
+#layout {
+        width: 1080px;
+        height: 680;
+        align: center;
+}
+#title {
+        text-align: center;
+        font-family: Helvetica;
+}
+#chart_container {
+        display: inline-block;
+        font-family: Arial, Helvetica, sans-serif;
+}
+#chart {
+        float: left;
+}
+#legend {
+        float: left;
+        margin-left: 15px;
+}
+#offset_form {
+        float: left;
+        margin: 2em 0 0 15px;
+        font-size: 13px;
+}
+#y_axis {
+        float: left;
+        width: 40px;
+}
+#slider {
+        margin-left: 35px;
+}
+
+
+</style>
+
+<!-- HTML LAYOUT -->
+        <title>
+                Reduce Emission
+        </title>
+        <div><center>
+        
+          <h1> E-Mission: Data driven carbon emission reduction </h1>
+
+        </center>
+        </div>
+        <h2>My Most Common Car Trips</h2>
+        <h1 id="improve" style="display: none; text-align : center">Weekly Footprint reduced by 2 kg</h1>
+        <div id="foo" style="position:relative; width: 600px">
+
+                <div id="map-canvas" style="position: relative; bottom : 0; left : 350px">
+                
+                </div>
+                <div class="btn" style="position: absolute; bottom : 0; left : 370px" id="drop" onclick="drop()">Improve my Footprint</div>
+        </div>
+        <h2>My Carbon Footprint</h2>
+        <div id="chart_container" style="margin-left:350px;">
+                <div id="y_axis"></div>
+                <div id="chart"></div>
+                <div id="legend"></div>
+                <form id="offset_form" class="toggler">
+                        <input type="radio" name="offset" id="lines" value="lines" checked>
+                        <label class="lines" for="lines">lines</label><br>
+                        <input type="radio" name="offset" id="stack" value="zero">
+                        <label class="stack" for="stack">stack</label>
+                </form>
+        </div>
+        <div id="slider" style="margin-bottom : 50px; margin-left : 390px;"></div>
+        <div><center>
+        
+          <h1><a href="carbon_calc_details.html">Learn more about how we calculate your carbon footprint </a></h1>
+
+        </center>
+ 
+
+<script>
+var palette = new Rickshaw.Color.Palette();
+
+//This data is actual data wrangled to fit the format of a time series display. Stored on an instance of mongodb following an approved IRB Protocol.
+var graph = new Rickshaw.Graph( {
+        element: document.querySelector("#chart"),
+        width: 540,
+        height: 240,
+        renderer: 'line',
+        series: [
+                {
+                        name: "My Footprint",
+                        data: [ { x: 1*604800, y: 15.87 }, { x: 2*604800, y: 17 }, { x: 3*604800, y: 14 }, { x: 4*604800, y: 18}],
+                        color: palette.color()
+                },
+                {
+                        name: "Target",
+                        data: [ { x: 1*604800, y: 5.33 }, { x: 2*604800, y: 5.33 }, { x: 3*604800, y: 5.33 }, { x: 4*604800, y: 5.33 }],
+                        color: palette.color()
+                }
+        ]
+} );
+
+var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );
+
+var y_axis = new Rickshaw.Graph.Axis.Y( {
+        graph: graph,
+        orientation: 'left',
+        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+        element: document.getElementById('y_axis'),
+} );
+
+var legend = new Rickshaw.Graph.Legend( {
+        element: document.querySelector('#legend'),
+        graph: graph
+} );
+
+var offsetForm = document.getElementById('offset_form');
+
+offsetForm.addEventListener('change', function(e) {
+        var offsetMode = e.target.value;
+
+        if (offsetMode == 'lines') {
+                graph.setRenderer('line');
+                graph.offset = 'zero';
+        } else {
+                graph.setRenderer('stack');
+                graph.offset = offsetMode;
+        }       
+        graph.render();
+
+}, false);
+
+new Rickshaw.Graph.HoverDetail({
+  graph: graph
+});
+
+
+var slider = new Rickshaw.Graph.RangeSlider.Preview({
+        graph: graph,
+        element: document.querySelector('#slider')
+});
+
+graph.render();
+
+</script>
